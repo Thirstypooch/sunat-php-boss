@@ -1,0 +1,2335 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SunatPHP - Documentacion Tecnica Completa</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+    <style>
+        :root {
+            --bg: #0f1117;
+            --surface: #161b22;
+            --surface-2: #1c2333;
+            --border: #30363d;
+            --text: #e6edf3;
+            --text-muted: #8b949e;
+            --accent: #58a6ff;
+            --accent-2: #3fb950;
+            --accent-3: #d2a8ff;
+            --accent-4: #f0883e;
+            --danger: #f85149;
+            --code-bg: #0d1117;
+            --success: #238636;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+            font-size: 16px;
+        }
+
+        /* --- NAV SIDEBAR --- */
+        .layout { display: flex; min-height: 100vh; }
+
+        nav {
+            width: 280px;
+            min-width: 280px;
+            background: var(--surface);
+            border-right: 1px solid var(--border);
+            padding: 24px 0;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        nav .logo {
+            padding: 0 20px 20px;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 16px;
+        }
+
+        nav .logo h2 {
+            color: var(--accent);
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        nav .logo span {
+            color: var(--text-muted);
+            font-size: 12px;
+            display: block;
+            margin-top: 4px;
+        }
+
+        nav a {
+            display: block;
+            padding: 8px 20px;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 14px;
+            transition: all 0.15s;
+            border-left: 3px solid transparent;
+        }
+
+        nav a:hover {
+            color: var(--text);
+            background: var(--surface-2);
+            border-left-color: var(--accent);
+        }
+
+        nav .section-label {
+            padding: 16px 20px 6px;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        /* --- MAIN CONTENT --- */
+        main {
+            flex: 1;
+            max-width: 960px;
+            padding: 48px 56px;
+        }
+
+        h1 { font-size: 2.4em; margin-bottom: 8px; color: var(--accent); font-weight: 800; }
+        h2 { font-size: 1.7em; margin: 48px 0 16px; padding-bottom: 8px; border-bottom: 1px solid var(--border); color: var(--text); }
+        h3 { font-size: 1.25em; margin: 32px 0 12px; color: var(--accent-3); }
+        h4 { font-size: 1.05em; margin: 20px 0 8px; color: var(--accent-4); }
+
+        p { margin-bottom: 16px; color: var(--text); }
+
+        a { color: var(--accent); text-decoration: none; }
+        a:hover { text-decoration: underline; }
+
+        code {
+            background: var(--code-bg);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.9em;
+            border: 1px solid var(--border);
+            font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+        }
+
+        pre {
+            background: var(--code-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 20px;
+            overflow-x: auto;
+            margin: 16px 0 24px;
+            font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            color: var(--text);
+            white-space: pre;
+        }
+
+        pre code {
+            background: none;
+            border: none;
+            padding: 0;
+            font-size: inherit;
+        }
+
+        .subtitle { font-size: 1.15em; color: var(--text-muted); margin-bottom: 32px; }
+
+        /* --- CARDS --- */
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 20px 24px;
+            margin: 16px 0;
+        }
+
+        .card.warning {
+            border-left: 4px solid var(--accent-4);
+        }
+
+        .card.danger {
+            border-left: 4px solid var(--danger);
+        }
+
+        .card.success {
+            border-left: 4px solid var(--accent-2);
+        }
+
+        .card.info {
+            border-left: 4px solid var(--accent);
+        }
+
+        .card-title {
+            font-weight: 700;
+            margin-bottom: 8px;
+            font-size: 0.95em;
+        }
+
+        .card.warning .card-title { color: var(--accent-4); }
+        .card.danger .card-title { color: var(--danger); }
+        .card.success .card-title { color: var(--accent-2); }
+        .card.info .card-title { color: var(--accent); }
+
+        /* --- TABLES --- */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 16px 0 24px;
+            font-size: 14px;
+        }
+
+        th, td {
+            padding: 10px 14px;
+            text-align: left;
+            border: 1px solid var(--border);
+        }
+
+        th {
+            background: var(--surface-2);
+            font-weight: 600;
+            color: var(--accent);
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        td { background: var(--surface); }
+
+        tr:hover td { background: var(--surface-2); }
+
+        /* --- BADGES --- */
+        .badge {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .badge.broken { background: rgba(248, 81, 73, 0.2); color: var(--danger); }
+        .badge.fixed { background: rgba(63, 185, 80, 0.2); color: var(--accent-2); }
+        .badge.new { background: rgba(88, 166, 255, 0.2); color: var(--accent); }
+
+        /* --- TIMELINE --- */
+        .timeline {
+            position: relative;
+            padding-left: 32px;
+            margin: 24px 0;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 10px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--border);
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 24px;
+            padding: 16px 20px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -28px;
+            top: 22px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--accent);
+            border: 2px solid var(--bg);
+        }
+
+        .timeline-item.broken::before { background: var(--danger); }
+        .timeline-item.fixed::before { background: var(--accent-2); }
+
+        .timeline-date {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-bottom: 4px;
+        }
+
+        .timeline-title {
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .timeline-text {
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        /* --- FILE TREE --- */
+        pre.file-tree {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 20px 24px;
+            font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+            font-size: 14px;
+            line-height: 1.8;
+            white-space: pre;
+            color: var(--text);
+        }
+
+        .file-tree .folder { color: var(--accent); font-weight: 600; }
+        .file-tree .file { color: var(--text-muted); }
+        .file-tree .modified { color: var(--accent-4); font-weight: 600; }
+        .file-tree .new-file { color: var(--accent-2); font-weight: 600; }
+
+        /* --- MERMAID --- */
+        .mermaid {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 24px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        /* --- COMPARISON COLUMNS --- */
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin: 16px 0;
+        }
+
+        .comparison > div {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 16px 20px;
+        }
+
+        .comparison .label {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .comparison .old .label { color: var(--danger); }
+        .comparison .new .label { color: var(--accent-2); }
+
+        /* --- STEP INDICATORS --- */
+        .step {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            margin: 16px 0;
+        }
+
+        .step-num {
+            min-width: 36px;
+            height: 36px;
+            background: var(--accent);
+            color: var(--bg);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 15px;
+        }
+
+        .step-content { flex: 1; }
+
+        /* --- LISTS --- */
+        ul, ol {
+            margin: 8px 0 16px 24px;
+            color: var(--text);
+        }
+
+        li { margin-bottom: 6px; }
+
+        /* --- RESPONSIVE --- */
+        @media (max-width: 900px) {
+            .layout { flex-direction: column; }
+            nav {
+                width: 100%;
+                min-width: auto;
+                height: auto;
+                position: relative;
+                border-right: none;
+                border-bottom: 1px solid var(--border);
+            }
+            main { padding: 24px 20px; }
+            .comparison { grid-template-columns: 1fr; }
+        }
+
+        /* --- KEYWORD HIGHLIGHTS --- */
+        .kw { color: var(--accent-3); }
+        .fn { color: var(--accent); }
+        .str { color: var(--accent-2); }
+        .cm { color: var(--text-muted); font-style: italic; }
+        .num { color: var(--accent-4); }
+
+        /* --- FLOW ARROWS --- */
+        .flow-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 12px 0;
+            flex-wrap: wrap;
+        }
+
+        .flow-box {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 10px 16px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .flow-arrow {
+            color: var(--accent);
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        /* --- SECTION DIVIDER --- */
+        .divider {
+            height: 1px;
+            background: var(--border);
+            margin: 48px 0;
+        }
+
+        /* --- HEADER HERO --- */
+        .hero {
+            background: linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 40px;
+            margin-bottom: 40px;
+        }
+
+        .hero .meta {
+            display: flex;
+            gap: 16px;
+            margin-top: 16px;
+            flex-wrap: wrap;
+        }
+
+        .hero .meta-item {
+            background: var(--code-bg);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 6px 14px;
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .hero .meta-item strong { color: var(--accent); }
+    </style>
+</head>
+<body>
+    <div class="layout">
+        <!-- ==================== SIDEBAR NAV ==================== -->
+        <nav>
+            <div class="logo">
+                <h2>SunatPHP</h2>
+                <span>jossmp/sunatphp - Documentacion Tecnica</span>
+            </div>
+
+            <div class="section-label">Introduccion</div>
+            <a href="#overview">Vision General</a>
+            <a href="#architecture">Arquitectura del Proyecto</a>
+            <a href="#file-tree">Estructura de Archivos</a>
+
+            <div class="section-label">Descubrimiento SUNAT</div>
+            <a href="#sunat-discovery">Proceso de Investigacion</a>
+            <a href="#sunat-old-flow">Flujo Antiguo (Roto)</a>
+            <a href="#sunat-new-flow">Flujo Nuevo (2024+)</a>
+            <a href="#sunat-captcha">El Falso reCAPTCHA v3</a>
+            <a href="#sunat-html-change">Cambio de HTML</a>
+
+            <div class="section-label">Correccion del Proyecto</div>
+            <a href="#what-broke">Que se Rompio</a>
+            <a href="#fixes-applied">Correcciones Aplicadas</a>
+            <a href="#token-fix">Fix: Token Generation</a>
+            <a href="#session-fix">Fix: Session Init</a>
+            <a href="#parser-fix">Fix: HTML Parser (DOM)</a>
+            <a href="#cookie-fix">Fix: Stale Cookies</a>
+            <a href="#php82-fix">Fix: PHP 8.2+ Compat</a>
+
+            <div class="section-label">Codigo Fuente</div>
+            <a href="#src-sunat">src/sunat.php</a>
+            <a href="#src-curl">src/curl.php</a>
+            <a href="#src-obj">src/obj.php</a>
+            <a href="#src-autoload">src/autoload.php</a>
+
+            <div class="section-label">Uso</div>
+            <a href="#quickstart">Inicio Rapido</a>
+            <a href="#usage-php">Uso en PHP</a>
+            <a href="#usage-web">Interfaz Web (example/)</a>
+            <a href="#response-format">Formato de Respuesta</a>
+            <a href="#field-reference">Referencia de Campos</a>
+            <a href="#dni-to-ruc">Conversion DNI a RUC</a>
+
+            <div class="section-label">Apendice</div>
+            <a href="#troubleshooting">Solucion de Problemas</a>
+            <a href="#sunat-endpoints">Endpoints SUNAT</a>
+            <a href="#comparison">Comparacion con API Laravel</a>
+        </nav>
+
+        <!-- ==================== MAIN CONTENT ==================== -->
+        <main>
+
+            <!-- ========== HERO ========== -->
+            <div class="hero">
+                <h1>SunatPHP</h1>
+                <p class="subtitle">
+                    Libreria PHP vanilla para consulta de RUC/DNI en SUNAT Peru sin captcha.
+                    Proyecto original de <strong>JossMP</strong> (jossmp/sunatphp) &mdash; actualizado para funcionar con la nueva
+                    estructura HTML y mecanismo de tokens de SUNAT 2024-2026.
+                </p>
+                <div class="meta">
+                    <div class="meta-item"><strong>Autor Original:</strong>&nbsp; Josue Mazco Puma</div>
+                    <div class="meta-item"><strong>Lenguaje:</strong>&nbsp; PHP vanilla (sin frameworks)</div>
+                    <div class="meta-item"><strong>Dependencias:</strong>&nbsp; Solo ext-curl</div>
+                    <div class="meta-item"><strong>Licencia:</strong>&nbsp; MIT</div>
+                </div>
+            </div>
+
+            <!-- ========== VISION GENERAL ========== -->
+            <h2 id="overview">Vision General</h2>
+
+            <p>
+                <strong>SunatPHP</strong> es una libreria ligera en PHP puro que permite consultar datos de contribuyentes
+                en el portal de SUNAT (Superintendencia Nacional de Aduanas y de Administracion Tributaria) de Peru.
+                Ingresando un numero de RUC (11 digitos) o DNI (8 digitos), la libreria realiza web scraping al portal
+                <code>e-consultaruc.sunat.gob.pe</code> y retorna los datos del contribuyente en formato JSON o XML.
+            </p>
+
+            <div class="card info">
+                <div class="card-title">Que hace este proyecto</div>
+                <ul>
+                    <li>Consulta datos de contribuyente por <strong>RUC</strong> (11 digitos) o <strong>DNI</strong> (8 digitos)</li>
+                    <li>Convierte automaticamente DNI a RUC usando el algoritmo oficial de SUNAT</li>
+                    <li>Valida el digito verificador del RUC antes de consultar</li>
+                    <li>Extrae <strong>representantes legales</strong> (opcional)</li>
+                    <li>Extrae <strong>cantidad de trabajadores</strong> por mes (opcional)</li>
+                    <li>Retorna datos en <strong>JSON</strong> o <strong>XML</strong></li>
+                    <li>Incluye interfaz web de ejemplo con Bootstrap + jQuery</li>
+                </ul>
+            </div>
+
+            <p>
+                En 2024, SUNAT modifico completamente su portal de consulta RUC: cambio el mecanismo de captcha,
+                actualizo las URLs de HTTP a HTTPS, y reemplazo toda la estructura HTML de tablas por Bootstrap 3 con
+                <code>list-group-item</code> y <code>col-sm-*</code>. Esto rompio la libreria original.
+                Este documento detalla todo el proceso de investigacion, los problemas encontrados y las correcciones aplicadas.
+            </p>
+
+            <!-- ========== ARQUITECTURA ========== -->
+            <h2 id="architecture">Arquitectura del Proyecto</h2>
+
+            <p>
+                El proyecto sigue una arquitectura simple de 3 clases en PHP puro, sin dependencias externas
+                mas alla de la extension <code>ext-curl</code> de PHP:
+            </p>
+
+            <div class="mermaid">
+graph TB
+    subgraph "SunatPHP - Arquitectura"
+        USER["Usuario / Script PHP"]
+        SUNAT_CLASS["Sunat\Sunat<br/><i>src/sunat.php</i><br/>Logica principal + parsing"]
+        CURL_CLASS["cURL\cURL<br/><i>src/curl.php</i><br/>Wrapper HTTP"]
+        OBJ_CLASS["response\obj<br/><i>src/obj.php</i><br/>Objeto respuesta"]
+        SUNAT_WEB["Portal SUNAT<br/>e-consultaruc.sunat.gob.pe"]
+    end
+
+    USER -->|"search(ruc)"| SUNAT_CLASS
+    SUNAT_CLASS -->|"HTTP requests via"| CURL_CLASS
+    CURL_CLASS -->|"cURL GET/POST"| SUNAT_WEB
+    SUNAT_WEB -->|"HTML response"| CURL_CLASS
+    CURL_CLASS -->|"raw HTML"| SUNAT_CLASS
+    SUNAT_CLASS -->|"parsed data"| OBJ_CLASS
+    OBJ_CLASS -->|"JSON/XML"| USER
+
+    style SUNAT_CLASS fill:#1f6feb,stroke:#58a6ff,color:#fff
+    style CURL_CLASS fill:#238636,stroke:#3fb950,color:#fff
+    style OBJ_CLASS fill:#8957e5,stroke:#d2a8ff,color:#fff
+    style SUNAT_WEB fill:#9e6a03,stroke:#f0883e,color:#fff
+    style USER fill:#30363d,stroke:#8b949e,color:#e6edf3
+            </div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Clase</th>
+                        <th>Namespace</th>
+                        <th>Archivo</th>
+                        <th>Responsabilidad</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>Sunat</code></td>
+                        <td><code>Sunat\</code></td>
+                        <td>src/sunat.php</td>
+                        <td>Logica de negocio: validacion, sesion, token, scraping, parsing HTML</td>
+                    </tr>
+                    <tr>
+                        <td><code>cURL</code></td>
+                        <td><code>cURL\</code></td>
+                        <td>src/curl.php</td>
+                        <td>Wrapper de libcurl: GET, POST, cookies, proxy, auth</td>
+                    </tr>
+                    <tr>
+                        <td><code>obj</code></td>
+                        <td><code>response\</code></td>
+                        <td>src/obj.php</td>
+                        <td>Objeto de respuesta dinamico con salida JSON/XML</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- ========== ESTRUCTURA DE ARCHIVOS ========== -->
+            <h2 id="file-tree">Estructura de Archivos</h2>
+
+            <pre class="file-tree"><span class="folder">sunat_php_boss/</span>
+<span class="folder">  src/</span>
+<span class="modified">    sunat.php</span>         &larr; Clase principal (MODIFICADA: token, session, DOM parser)
+<span class="modified">    curl.php</span>          &larr; Wrapper cURL (MODIFICADA: PHP 8.2 compat)
+<span class="modified">    obj.php</span>           &larr; Objeto respuesta (MODIFICADA: AllowDynamicProperties)
+<span class="file">    autoload.php</span>      &larr; Carga las 3 clases
+<span class="file">    cookie.txt</span>        &larr; Archivo de cookies (generado automaticamente)
+<span class="folder">  example/</span>
+<span class="file">    index.php</span>         &larr; Interfaz web Bootstrap + jQuery
+<span class="file">    consulta.php</span>      &larr; Backend AJAX para la interfaz web
+<span class="file">    js/ajaxview.js</span>    &larr; Plugin jQuery para loading overlay
+<span class="file">  composer.json</span>       &larr; Metadata del paquete (jossmp/sunatphp)
+<span class="new-file">  prueba.php</span>          &larr; Script de prueba por consola
+<span class="new-file">  docs/</span>
+<span class="new-file">    index.html</span>        &larr; Esta documentacion</pre>
+
+            <!-- ========== DESCUBRIMIENTO SUNAT ========== -->
+            <h2 id="sunat-discovery">Proceso de Investigacion de SUNAT</h2>
+
+            <p>
+                Para corregir esta libreria fue necesario entender a profundidad como funciona internamente el portal
+                de consulta RUC de SUNAT. A continuacion se documenta todo el proceso de ingenieria inversa realizado.
+            </p>
+
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-date">Paso 1 - Analisis del portal web</div>
+                    <div class="timeline-title">Inspeccion del formulario de busqueda</div>
+                    <div class="timeline-text">
+                        Se inspecciono el portal <code>e-consultaruc.sunat.gob.pe</code> con DevTools del navegador.
+                        Se descubrio que la URL de la pagina principal cambio de <code>frameCriterioBusqueda.jsp</code>
+                        (minuscula) a <code>FrameCriterioBusquedaWeb.jsp</code> (PascalCase). El formulario ahora
+                        envia los datos a <code>jcrS00Alias</code> via POST.
+                    </div>
+                </div>
+
+                <div class="timeline-item broken">
+                    <div class="timeline-date">Paso 2 - Descubrimiento del captcha roto</div>
+                    <div class="timeline-title">El endpoint /captcha?accion=random ya no existe</div>
+                    <div class="timeline-text">
+                        El codigo original llamaba a <code>/captcha?accion=random</code> para obtener un valor
+                        <code>numRnd</code> que se enviaba con cada consulta. Este endpoint ahora retorna
+                        <strong>HTTP 401 Unauthorized</strong>. SUNAT lo reemplazo completamente.
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-date">Paso 3 - Analisis del JavaScript de SUNAT</div>
+                    <div class="timeline-title">Descubrimiento del falso reCAPTCHA v3</div>
+                    <div class="timeline-text">
+                        Al inspeccionar los scripts del portal, se encontro el archivo
+                        <code>sunatrecaptcha3.js</code>. A pesar del nombre, NO es el reCAPTCHA real de Google.
+                        Es un script que crea un objeto <code>grecaptcha</code> falso que simplemente genera
+                        strings hexadecimales aleatorios de 52 caracteres. Ver seccion detallada mas abajo.
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-date">Paso 4 - Captura del trafico HTTP</div>
+                    <div class="timeline-title">Identificacion de los parametros POST correctos</div>
+                    <div class="timeline-text">
+                        Se capturaron las peticiones HTTP del navegador para identificar los parametros exactos:
+                        <code>nroRuc</code>, <code>accion</code>, <code>token</code>, <code>contexto</code>
+                        y <code>modo</code>. Los parametros <code>numRnd</code> y <code>nroRandom</code>
+                        ya no existen.
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-date">Paso 5 - Analisis del HTML de respuesta</div>
+                    <div class="timeline-title">HTML migrado de tablas a Bootstrap 3</div>
+                    <div class="timeline-text">
+                        Toda la estructura HTML de la respuesta cambio. Antes usaba tablas con clases
+                        <code>bgn</code> y <code>bg</code>. Ahora usa componentes Bootstrap 3:
+                        <code>list-group-item</code>, <code>row</code>, <code>col-sm-5</code>,
+                        <code>col-sm-7</code>, <code>&lt;h4&gt;</code> y <code>&lt;p&gt;</code>.
+                    </div>
+                </div>
+
+                <div class="timeline-item fixed">
+                    <div class="timeline-date">Paso 6 - Implementacion de la solucion</div>
+                    <div class="timeline-title">Reescritura completa del scraper</div>
+                    <div class="timeline-text">
+                        Se reemplazo el mecanismo de token, se agrego inicializacion de sesion,
+                        se reescribieron todos los parsers de regex a DOMDocument+DOMXPath,
+                        se actualizaron URLs a HTTPS, y se corrigieron deprecaciones de PHP 8.2+.
+                    </div>
+                </div>
+            </div>
+
+            <!-- ========== FLUJO ANTIGUO ========== -->
+            <h2 id="sunat-old-flow">Flujo Antiguo (Roto)</h2>
+
+            <p>
+                Asi funcionaba el codigo original del proyecto antes de que SUNAT cambiara su portal:
+            </p>
+
+            <div class="mermaid">
+sequenceDiagram
+    participant PHP as SunatPHP
+    participant SUNAT as Portal SUNAT
+
+    Note over PHP,SUNAT: FLUJO ANTIGUO (Ya no funciona)
+
+    PHP->>SUNAT: GET /captcha?accion=random
+    SUNAT-->>PHP: numRnd = "2847391056"
+    Note right of PHP: Guardaba numRnd
+
+    PHP->>SUNAT: POST jcrS00Alias<br/>nroRuc=20516872307<br/>accion=consPorRuc<br/>numRnd=2847391056
+    SUNAT-->>PHP: HTML con tablas (td class="bgn/bg")
+
+    Note over PHP: Parsing con 15+ expresiones regex<br/>patron: td class=bgn...td class=bg
+            </div>
+
+            <div class="card danger">
+                <div class="card-title">Por que dejo de funcionar</div>
+                <ol>
+                    <li>El endpoint <code>/captcha?accion=random</code> retorna <strong>401 Unauthorized</strong></li>
+                    <li>El parametro <code>numRnd</code> ya no es aceptado por el servidor</li>
+                    <li>La estructura HTML cambio completamente, rompiendo todos los patrones regex</li>
+                    <li>Las URLs migraron de HTTP a HTTPS (redireccion forzada)</li>
+                </ol>
+            </div>
+
+            <!-- ========== FLUJO NUEVO ========== -->
+            <h2 id="sunat-new-flow">Flujo Nuevo (2024+)</h2>
+
+            <p>
+                Este es el flujo HTTP correcto que SUNAT utiliza actualmente y que implementa la version corregida:
+            </p>
+
+            <div class="mermaid">
+sequenceDiagram
+    participant PHP as SunatPHP
+    participant SUNAT as Portal SUNAT
+
+    Note over PHP,SUNAT: FLUJO NUEVO (Funcionando)
+
+    rect rgb(35, 134, 54)
+    PHP->>SUNAT: GET FrameCriterioBusquedaWeb.jsp
+    SUNAT-->>PHP: HTML + Set-Cookie: JSESSIONID=abc123
+    Note right of PHP: Cookie JSESSIONID guardada<br/>en cookie.txt
+    end
+
+    rect rgb(31, 111, 235)
+    Note over PHP: token = bin2hex(random_bytes(26))<br/>= "a3f8c1d9e2b4..."  (52 chars hex)
+    PHP->>SUNAT: POST jcrS00Alias<br/>nroRuc=20516872307<br/>accion=consPorRuc<br/>token=a3f8c1d9e2b4...<br/>contexto=ti-it<br/>modo=1<br/>Cookie: JSESSIONID=abc123
+    SUNAT-->>PHP: HTML Bootstrap (list-group-item)
+    Note right of PHP: Parsing con DOMDocument + DOMXPath
+    end
+
+    opt Si representantes_legales = true
+    rect rgb(137, 87, 229)
+    PHP->>SUNAT: POST jcrS00Alias<br/>accion=getRepLeg<br/>nroRuc=20516872307<br/>desRuc=NOMBRE EMPRESA<br/>contexto=ti-it<br/>modo=1
+    SUNAT-->>PHP: HTML tabla Bootstrap
+    end
+    end
+
+    opt Si cantidad_trabajadores = true
+    rect rgb(158, 106, 3)
+    PHP->>SUNAT: POST jcrS00Alias<br/>accion=getCantTrab<br/>nroRuc=20516872307<br/>contexto=ti-it<br/>modo=1
+    SUNAT-->>PHP: HTML tabla Bootstrap
+    end
+    end
+            </div>
+
+            <h3>Parametros POST requeridos</h3>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Parametro</th>
+                        <th>Valor</th>
+                        <th>Descripcion</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>nroRuc</code></td>
+                        <td>RUC de 11 digitos</td>
+                        <td>Numero de RUC a consultar</td>
+                    </tr>
+                    <tr>
+                        <td><code>accion</code></td>
+                        <td><code>consPorRuc</code></td>
+                        <td>Tipo de accion (consulta por RUC)</td>
+                    </tr>
+                    <tr>
+                        <td><code>token</code></td>
+                        <td>52 chars hex aleatorio</td>
+                        <td>Reemplazo del antiguo <code>numRnd</code>. Cualquier hex de 52 chars es valido.</td>
+                    </tr>
+                    <tr>
+                        <td><code>contexto</code></td>
+                        <td><code>ti-it</code></td>
+                        <td>Contexto de la consulta (obligatorio desde 2024)</td>
+                    </tr>
+                    <tr>
+                        <td><code>modo</code></td>
+                        <td><code>1</code></td>
+                        <td>Modo de consulta (obligatorio desde 2024)</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- ========== FALSO RECAPTCHA ========== -->
+            <h2 id="sunat-captcha">El Falso reCAPTCHA v3 de SUNAT</h2>
+
+            <p>
+                Este es posiblemente el hallazgo mas interesante de toda la investigacion. SUNAT implemento
+                lo que <em>parece</em> ser Google reCAPTCHA v3, pero en realidad es un <strong>mecanismo completamente
+                falso</strong>.
+            </p>
+
+            <div class="card warning">
+                <div class="card-title">Descubrimiento clave</div>
+                <p>
+                    El archivo <code>sunatrecaptcha3.js</code> no carga el reCAPTCHA real de Google.
+                    En su lugar, define un objeto <code>grecaptcha</code> falso que simplemente genera
+                    strings hexadecimales aleatorios. El servidor acepta <strong>cualquier string hexadecimal
+                    de 52 caracteres</strong> como token valido.
+                </p>
+            </div>
+
+            <h3>Como funciona el script de SUNAT</h3>
+
+            <p>El archivo <code>sunatrecaptcha3.js</code> hace lo siguiente (simplificado):</p>
+
+<pre><code><span class="cm">// Pseudocodigo de sunatrecaptcha3.js de SUNAT</span>
+<span class="kw">var</span> grecaptcha = {
+    ready: <span class="kw">function</span>(callback) {
+        callback();   <span class="cm">// Ejecuta inmediatamente, sin verificar nada</span>
+    },
+    execute: <span class="kw">function</span>(siteKey, options) {
+        <span class="kw">return</span> {
+            then: <span class="kw">function</span>(callback) {
+                <span class="cm">// Genera un hex aleatorio de 52 caracteres</span>
+                <span class="kw">var</span> token = <span class="str">""</span>;
+                <span class="kw">var</span> chars = <span class="str">"0123456789abcdef"</span>;
+                <span class="kw">for</span> (<span class="kw">var</span> i = <span class="num">0</span>; i &lt; <span class="num">52</span>; i++) {
+                    token += chars.charAt(Math.floor(Math.random() * <span class="num">16</span>));
+                }
+                callback(token);  <span class="cm">// Retorna el hex como "token"</span>
+            }
+        };
+    }
+};</code></pre>
+
+            <h3>Nuestra solucion en PHP</h3>
+
+            <p>
+                Replicamos exactamente el mismo comportamiento en PHP con una sola linea:
+            </p>
+
+<pre><code><span class="kw">function</span> <span class="fn">generateToken</span>()
+{
+    <span class="kw">return</span> bin2hex(random_bytes(<span class="num">26</span>));  <span class="cm">// 26 bytes = 52 caracteres hex</span>
+}
+
+<span class="cm">// Ejemplo de token generado:</span>
+<span class="cm">// "a3f8c1d9e2b47f6a0c3d5e8b1f7a9c2d4e6f8a0b3c5d7e9f1a"</span></code></pre>
+
+            <div class="card success">
+                <div class="card-title">Verificado</div>
+                <p>
+                    El servidor de SUNAT acepta cualquier string de 52 caracteres hexadecimales como token valido.
+                    No hay validacion real del captcha del lado del servidor. Esto permite consultas programaticas
+                    sin necesidad de resolver ningun captcha.
+                </p>
+            </div>
+
+            <!-- ========== CAMBIO HTML ========== -->
+            <h2 id="sunat-html-change">Cambio de Estructura HTML</h2>
+
+            <p>
+                SUNAT migro toda su interfaz de tablas HTML clasicas a componentes Bootstrap 3.
+                Esto rompio todos los patrones regex del codigo original.
+            </p>
+
+            <div class="comparison">
+                <div class="old">
+                    <div class="label">HTML Antiguo (Antes de 2024)</div>
+<pre><code>&lt;td class="bgn"&gt;Razon Social:&lt;/td&gt;
+&lt;td class="bg"&gt;
+  DISTRIBUIDORA JANDY SAC
+&lt;/td&gt;</code></pre>
+                    <p style="font-size:13px; color:var(--text-muted); margin-top:8px;">
+                        Tablas con clases <code>bgn</code> (label) y <code>bg</code> (valor).
+                        Cada campo en un par de <code>&lt;td&gt;</code>.
+                    </p>
+                </div>
+                <div class="new">
+                    <div class="label">HTML Nuevo (2024+)</div>
+<pre><code>&lt;div class="list-group-item"&gt;
+  &lt;div class="row"&gt;
+    &lt;div class="col-sm-5"&gt;
+      &lt;h4&gt;Numero de RUC:&lt;/h4&gt;
+    &lt;/div&gt;
+    &lt;div class="col-sm-7"&gt;
+      &lt;p&gt;20516872307 - DISTRIBUIDORA JANDY SAC&lt;/p&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+                    <p style="font-size:13px; color:var(--text-muted); margin-top:8px;">
+                        Bootstrap 3 con <code>list-group-item</code>, filas <code>row</code> y columnas
+                        <code>col-sm-5/7</code>. Labels en <code>&lt;h4&gt;</code>, valores en <code>&lt;p&gt;</code>.
+                    </p>
+                </div>
+            </div>
+
+            <h3>Tablas de representantes legales y trabajadores</h3>
+
+            <div class="comparison">
+                <div class="old">
+                    <div class="label">Tabla Antigua</div>
+<pre><code>&lt;td class=bg align="left"&gt;
+  DOC. NACIONAL DE IDENTIDAD
+&lt;/td&gt;
+&lt;td class=bg align="center"&gt;
+  12345678
+&lt;/td&gt;</code></pre>
+                </div>
+                <div class="new">
+                    <div class="label">Tabla Nueva</div>
+<pre><code>&lt;table class="table"&gt;
+  &lt;thead&gt;...&lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;DOC. NAC. DE IDENTIDAD&lt;/td&gt;
+      &lt;td&gt;12345678&lt;/td&gt;
+      ...
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;</code></pre>
+                </div>
+            </div>
+
+            <div class="divider"></div>
+
+            <!-- ========== QUE SE ROMPIO ========== -->
+            <h2 id="what-broke">Que se Rompio</h2>
+
+            <p>
+                Resumen completo de todo lo que dejo de funcionar en el codigo original:
+            </p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Componente</th>
+                        <th>Estado</th>
+                        <th>Problema</th>
+                        <th>Causa</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>getNumRand()</code></td>
+                        <td><span class="badge broken">ROTO</span></td>
+                        <td>Retornaba siempre vacio</td>
+                        <td>Endpoint <code>/captcha?accion=random</code> retorna 401</td>
+                    </tr>
+                    <tr>
+                        <td><code>search()</code> - POST params</td>
+                        <td><span class="badge broken">ROTO</span></td>
+                        <td>SUNAT rechazaba la peticion</td>
+                        <td>Parametro <code>numRnd</code> reemplazado por <code>token</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>search()</code> - sesion</td>
+                        <td><span class="badge broken">ROTO</span></td>
+                        <td>No habia cookie JSESSIONID</td>
+                        <td>Faltaba GET inicial para establecer sesion</td>
+                    </tr>
+                    <tr>
+                        <td>15+ regex en <code>search()</code></td>
+                        <td><span class="badge broken">ROTO</span></td>
+                        <td>No matcheaban nada</td>
+                        <td>HTML cambio de tablas <code>bgn/bg</code> a Bootstrap <code>list-group</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>RepresentanteLegal()</code> regex</td>
+                        <td><span class="badge broken">ROTO</span></td>
+                        <td>No encontraba representantes</td>
+                        <td>Tabla HTML cambio a <code>&lt;table class="table"&gt;</code> con <code>thead/tbody</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>numTrabajadores()</code> regex</td>
+                        <td><span class="badge broken">ROTO</span></td>
+                        <td>No encontraba trabajadores</td>
+                        <td>Mismo cambio de estructura de tabla</td>
+                    </tr>
+                    <tr>
+                        <td>URLs HTTP</td>
+                        <td><span class="badge broken">ROTO</span></td>
+                        <td>Redireccion innecesaria</td>
+                        <td>SUNAT migro a HTTPS (redireccion forzada)</td>
+                    </tr>
+                    <tr>
+                        <td><code>utf8_encode()</code></td>
+                        <td><span class="badge broken">ROTO</span></td>
+                        <td>Deprecated warning en PHP 8.2+</td>
+                        <td>Funcion deprecada en PHP 8.2</td>
+                    </tr>
+                    <tr>
+                        <td>Propiedades dinamicas</td>
+                        <td><span class="badge broken">ROTO</span></td>
+                        <td>Deprecated warning en PHP 8.2+</td>
+                        <td><code>obj</code> usaba propiedades dinamicas sin declarar</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- ========== CORRECCIONES ========== -->
+            <h2 id="fixes-applied">Correcciones Aplicadas</h2>
+
+            <div class="mermaid">
+graph LR
+    subgraph "Antes (Roto)"
+        A1["getNumRand()"] --> A2["GET /captcha?accion=random"]
+        A2 --> A3["401 Unauthorized"]
+        A3 --> A4["numRnd = vacio"]
+        A4 --> A5["POST con numRnd vacio"]
+        A5 --> A6["SUNAT rechaza"]
+    end
+
+    subgraph "Despues (Corregido)"
+        B1["initSession()"] --> B2["GET FrameCriterioBusquedaWeb.jsp"]
+        B2 --> B3["JSESSIONID guardado"]
+        B3 --> B4["generateToken()"]
+        B4 --> B5["bin2hex(random_bytes(26))"]
+        B5 --> B6["POST con token + contexto + modo"]
+        B6 --> B7["SUNAT responde OK"]
+    end
+
+    style A3 fill:#da3633,stroke:#f85149,color:#fff
+    style A6 fill:#da3633,stroke:#f85149,color:#fff
+    style B3 fill:#238636,stroke:#3fb950,color:#fff
+    style B7 fill:#238636,stroke:#3fb950,color:#fff
+            </div>
+
+            <!-- ========== FIX: TOKEN ========== -->
+            <h3 id="token-fix">Fix 1: Generacion de Token</h3>
+
+            <div class="comparison">
+                <div class="old">
+                    <div class="label">Codigo Original (Eliminado)</div>
+<pre><code><span class="cm">// Se elimino completamente</span>
+<span class="kw">function</span> <span class="fn">getNumRand</span>()
+{
+    $data = <span class="kw">array</span>(
+        <span class="str">"accion"</span> => <span class="str">"random"</span>
+    );
+    $rtn = $this->cc->send(
+        <span class="str">"http://...cl-ti-itmrconsruc"</span>
+        .<span class="str">"/captcha"</span>, $data
+    );
+    <span class="kw">return</span> $rtn;
+}</code></pre>
+                </div>
+                <div class="new">
+                    <div class="label">Codigo Nuevo</div>
+<pre><code><span class="cm">/**
+ * SUNAT's "reCAPTCHA v3" is a mock
+ * that generates random hex strings.
+ * Server accepts any 52-char hex.
+ */</span>
+<span class="kw">function</span> <span class="fn">generateToken</span>()
+{
+    <span class="kw">return</span> bin2hex(random_bytes(<span class="num">26</span>));
+}</code></pre>
+                </div>
+            </div>
+
+            <!-- ========== FIX: SESSION ========== -->
+            <h3 id="session-fix">Fix 2: Inicializacion de Sesion</h3>
+
+            <p>
+                El codigo original iba directo al POST sin establecer sesion. SUNAT requiere una cookie
+                <code>JSESSIONID</code> que solo se obtiene haciendo un GET inicial a la pagina del formulario.
+            </p>
+
+            <div class="card info">
+                <div class="card-title">Metodo nuevo: initSession()</div>
+                <p>
+                    Se agrego un paso previo que realiza un GET a <code>FrameCriterioBusquedaWeb.jsp</code>.
+                    El servidor responde con un header <code>Set-Cookie: JSESSIONID=...</code> que se guarda
+                    automaticamente en <code>cookie.txt</code> gracias al wrapper cURL. Todas las peticiones
+                    POST subsiguientes envian esta cookie.
+                </p>
+            </div>
+
+<pre><code><span class="kw">function</span> <span class="fn">initSession</span>()
+{
+    <span class="kw">if</span>( $this->_sessionReady ) <span class="kw">return true</span>;
+
+    <span class="cm">// Limpiar cookies viejas para obtener JSESSIONID fresco</span>
+    $cookieFile = __DIR__ . <span class="str">"/cookie.txt"</span>;
+    <span class="kw">if</span>( file_exists($cookieFile) ) file_put_contents($cookieFile, <span class="str">""</span>);
+
+    <span class="cm">// GET al formulario para establecer sesion</span>
+    $this->cc->connect( $this->_frameUrl );
+
+    <span class="kw">if</span>( $this->cc->getHttpStatus() == <span class="num">200</span> )
+    {
+        $this->_sessionReady = <span class="kw">true</span>;
+        <span class="kw">return true</span>;
+    }
+    <span class="kw">return false</span>;
+}</code></pre>
+
+            <!-- ========== FIX: PARSER ========== -->
+            <h3 id="parser-fix">Fix 3: Parser HTML con DOMDocument + DOMXPath</h3>
+
+            <p>
+                La correccion mas significativa fue reemplazar <strong>15+ expresiones regulares</strong> con un
+                parser basado en <code>DOMDocument</code> y <code>DOMXPath</code>. Esto es mucho mas robusto
+                que regex para parsear HTML, ya que no se rompe con cambios menores de whitespace o atributos.
+            </p>
+
+            <div class="comparison">
+                <div class="old">
+                    <div class="label">Antes: 15+ Regex</div>
+<pre><code><span class="cm">// Un regex por cada campo...</span>
+$patron = <span class="str">'td class="bgn"&gt;'</span>
+  . <span class="str">'Tipo Contribuyente:&lt;/td&gt;'</span>
+  . <span class="str">'\r\n&lt;td class="bg"&gt;(.*)'</span>
+  . <span class="str">'&lt;/td&gt;/'</span>;
+preg_match($patron, $page, $out);
+$tipo = $out[<span class="num">1</span>];
+
+<span class="cm">// Repetido 15 veces para cada campo</span>
+<span class="cm">// Fragil: se rompe con cualquier</span>
+<span class="cm">// cambio de whitespace o estructura</span></code></pre>
+                </div>
+                <div class="new">
+                    <div class="label">Despues: DOMXPath</div>
+<pre><code><span class="cm">// Un solo query obtiene TODOS los pares</span>
+$xpath = <span class="kw">new</span> DOMXPath($doc);
+$items = $xpath->query(
+  <span class="str">'//div[contains(@class,</span>
+  <span class="str">"list-group-item")]</span>
+  <span class="str">//div[contains(@class,"row")]'</span>
+);
+
+<span class="kw">foreach</span>($items <span class="kw">as</span> $row) {
+    $cols = $xpath->query(
+        <span class="str">'.//div[contains(@class,</span>
+        <span class="str">"col-sm-")]'</span>, $row
+    );
+    <span class="cm">// Extraer label y valor</span>
+}</code></pre>
+                </div>
+            </div>
+
+            <h4>Diagrama del proceso de parsing</h4>
+
+            <div class="mermaid">
+flowchart TD
+    A["HTML de SUNAT"] --> B["DOMDocument::loadHTML()"]
+    B --> C["DOMXPath"]
+    C --> D{"Query: div.list-group-item<br/>div.row"}
+    D --> E["Para cada fila:"]
+    E --> F["col-sm-5 = Label<br/>(ej: 'Estado del Contribuyente:')"]
+    E --> G["col-sm-7 = Valor<br/>(ej: 'ACTIVO')"]
+    F --> H["cleanText()"]
+    G --> H
+    H --> I["data['label'] = 'valor'"]
+    I --> J["mapToFields()"]
+    J --> K["Array asociativo<br/>con nombres de campo"]
+
+    style A fill:#9e6a03,stroke:#f0883e,color:#fff
+    style C fill:#1f6feb,stroke:#58a6ff,color:#fff
+    style J fill:#8957e5,stroke:#d2a8ff,color:#fff
+    style K fill:#238636,stroke:#3fb950,color:#fff
+            </div>
+
+            <h4>Mapeo de labels SUNAT a nombres de campo</h4>
+
+            <p>
+                El metodo <code>mapToFields()</code> convierte los labels en espanol que SUNAT usa en el HTML
+                a nombres de campo estandarizados:
+            </p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Label en HTML de SUNAT</th>
+                        <th>Campo en respuesta</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>Numero de RUC:</td><td><code>ruc</code> + <code>razon_social</code></td></tr>
+                    <tr><td>Nombre Comercial:</td><td><code>nombre_comercial</code></td></tr>
+                    <tr><td>Tipo Contribuyente:</td><td><code>tipo</code></td></tr>
+                    <tr><td>Fecha de Inscripcion:</td><td><code>fecha_inscripcion</code></td></tr>
+                    <tr><td>Estado del Contribuyente:</td><td><code>estado</code></td></tr>
+                    <tr><td>Condicion del Contribuyente:</td><td><code>condicion</code></td></tr>
+                    <tr><td>Domicilio Fiscal:</td><td><code>direccion</code></td></tr>
+                    <tr><td>Sistema de Emision de Comprobante:</td><td><code>sistema_emision</code></td></tr>
+                    <tr><td>Actividad de Comercio Exterior:</td><td><code>actividad_exterior</code></td></tr>
+                    <tr><td>Sistema de Contabilidad:</td><td><code>sistema_contabilidad</code></td></tr>
+                    <tr><td>Profesion u Oficio:</td><td><code>oficio</code></td></tr>
+                    <tr><td>Actividad(es) Economica(s):</td><td><code>actividad_economica</code></td></tr>
+                    <tr><td>Emisor electronico desde:</td><td><code>emision_electronica</code></td></tr>
+                    <tr><td>Afiliado al PLE desde:</td><td><code>ple</code></td></tr>
+                </tbody>
+            </table>
+
+            <!-- ========== FIX: COOKIES ========== -->
+            <h3 id="cookie-fix">Fix 4: Cookies Obsoletas</h3>
+
+            <p>
+                Se descubrio un bug intermitente: la primera ejecucion funcionaba perfectamente, pero
+                ejecuciones subsiguientes fallaban con "No se encontraron datos suficientes".
+            </p>
+
+            <div class="card danger">
+                <div class="card-title">Problema: Cookies persistentes entre ejecuciones</div>
+                <p>
+                    El archivo <code>cookie.txt</code> persistia en disco entre ejecuciones del script.
+                    En la segunda ejecucion, cURL enviaba el JSESSIONID viejo (ya expirado en el servidor de SUNAT)
+                    en lugar de obtener uno nuevo. SUNAT respondia con una pagina de error.
+                </p>
+            </div>
+
+            <div class="card success">
+                <div class="card-title">Solucion</div>
+                <p>
+                    El metodo <code>initSession()</code> ahora limpia el archivo de cookies antes de hacer el GET
+                    inicial. Esto fuerza a cURL a no enviar cookies viejas y a aceptar el nuevo JSESSIONID:
+                </p>
+<pre><code><span class="cm">// En initSession():</span>
+$cookieFile = __DIR__ . <span class="str">"/cookie.txt"</span>;
+<span class="kw">if</span>( file_exists($cookieFile) )
+    file_put_contents($cookieFile, <span class="str">""</span>);  <span class="cm">// Borrar cookies viejas</span></code></pre>
+            </div>
+
+            <!-- ========== FIX: PHP 8.2 ========== -->
+            <h3 id="php82-fix">Fix 5: Compatibilidad PHP 8.2+</h3>
+
+            <p>
+                PHP 8.2 introdujo varios cambios que generaban warnings con el codigo original:
+            </p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Problema</th>
+                        <th>Archivo</th>
+                        <th>Solucion</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Propiedades dinamicas deprecadas</td>
+                        <td>src/obj.php</td>
+                        <td>Agregar atributo <code>#[\AllowDynamicProperties]</code> a la clase</td>
+                    </tr>
+                    <tr>
+                        <td>Propiedad <code>$s</code> no declarada en <code>cURL</code></td>
+                        <td>src/curl.php</td>
+                        <td>Agregar <code>protected $s;</code> como propiedad de clase</td>
+                    </tr>
+                    <tr>
+                        <td><code>curl_close()</code> en tipo <code>CurlHandle</code></td>
+                        <td>src/curl.php</td>
+                        <td>Guard con <code>is_resource()</code> antes de cerrar</td>
+                    </tr>
+                    <tr>
+                        <td><code>utf8_encode()</code> deprecada</td>
+                        <td>src/sunat.php</td>
+                        <td>Eliminada (ya no necesaria con el parser DOM que maneja UTF-8 nativo)</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="divider"></div>
+
+            <!-- ========== CODIGO FUENTE - SUNAT.PHP ========== -->
+            <h2 id="src-sunat">Codigo Fuente: src/sunat.php</h2>
+
+            <p>
+                El archivo principal del proyecto. Contiene toda la logica de consulta, parsing y formateo de datos.
+            </p>
+
+            <h3>Constructor</h3>
+
+<pre><code><span class="kw">function</span> <span class="fn">__construct</span>( $representantes_legales=<span class="kw">false</span>, $cantidad_trabajadores=<span class="kw">false</span> )
+{
+    $this->_legal = $representantes_legales;
+    $this->_trabs = $cantidad_trabajadores;
+
+    $this->cc = <span class="kw">new</span> \cURL\cURL();
+    $this->cc->setReferer( $this->_frameUrl );
+    $this->cc->useCookie( <span class="kw">true</span> );
+    $this->cc->setCookiFileLocation( __DIR__ . <span class="str">"/cookie.txt"</span> );
+}</code></pre>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Parametro</th>
+                        <th>Tipo</th>
+                        <th>Default</th>
+                        <th>Descripcion</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>$representantes_legales</code></td>
+                        <td>bool</td>
+                        <td>false</td>
+                        <td>Si true, consulta representantes legales (2do POST)</td>
+                    </tr>
+                    <tr>
+                        <td><code>$cantidad_trabajadores</code></td>
+                        <td>bool</td>
+                        <td>false</td>
+                        <td>Si true, consulta cantidad de trabajadores (3er POST)</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Metodo search()</h3>
+
+            <p>Metodo principal. Flujo interno:</p>
+
+            <div class="mermaid">
+flowchart TD
+    A["search(ruc)"] --> B{"strlen == 8?"}
+    B -->|Si| C["dnitoruc(ruc)<br/>Convertir DNI a RUC"]
+    B -->|No| D{"strlen == 11?"}
+    C --> D
+    D -->|Si| E{"valid(ruc)?"}
+    D -->|No| F["Error: Formato no valido"]
+    E -->|No| G["Error: RUC no valido"]
+    E -->|Si| H["initSession()"]
+    H -->|Fallo| I["Error: No se pudo conectar"]
+    H -->|OK| J["generateToken()"]
+    J --> K["POST jcrS00Alias<br/>nroRuc + token + contexto + modo"]
+    K --> L{"HTTP 200?"}
+    L -->|No| I
+    L -->|Si| M["parseRucResponse(html)"]
+    M -->|False| N["Error: Datos insuficientes"]
+    M -->|OK| O{"_legal == true?"}
+    O -->|Si| P["RepresentanteLegal()"]
+    O -->|No| Q{"_trabs == true?"}
+    P --> Q
+    Q -->|Si| R["numTrabajadores()"]
+    Q -->|No| S["Retornar respuesta"]
+    R --> S
+
+    style F fill:#da3633,stroke:#f85149,color:#fff
+    style G fill:#da3633,stroke:#f85149,color:#fff
+    style I fill:#da3633,stroke:#f85149,color:#fff
+    style N fill:#da3633,stroke:#f85149,color:#fff
+    style S fill:#238636,stroke:#3fb950,color:#fff
+            </div>
+
+            <h3>Metodos de parsing</h3>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Metodo</th>
+                        <th>Que parsea</th>
+                        <th>Tecnica</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>parseRucResponse()</code></td>
+                        <td>Datos principales del contribuyente</td>
+                        <td>DOMXPath sobre <code>div.list-group-item</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>mapToFields()</code></td>
+                        <td>Convierte labels SUNAT a nombres de campo</td>
+                        <td>Array asociativo de mapeo</td>
+                    </tr>
+                    <tr>
+                        <td><code>parseRepLegalHtml()</code></td>
+                        <td>Tabla de representantes legales</td>
+                        <td>DOMXPath sobre <code>table.table tbody tr</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>parseTrabajadoresHtml()</code></td>
+                        <td>Tabla de cantidad de trabajadores</td>
+                        <td>DOMXPath sobre <code>table.table tbody tr</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>cleanText()</code></td>
+                        <td>Limpieza de texto extraido del DOM</td>
+                        <td>Colapsa whitespace multiple + trim</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Metodos de utilidad</h3>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Metodo</th>
+                        <th>Que hace</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>dnitoruc($dni)</code></td>
+                        <td>Convierte un DNI de 8 digitos a RUC de 11 digitos usando el algoritmo oficial de SUNAT.
+                            Prefija con <code>10</code> y calcula el digito verificador usando pesos <code>[5,4,3,2,7,6,5,4,3,2]</code>.</td>
+                    </tr>
+                    <tr>
+                        <td><code>valid($ruc)</code></td>
+                        <td>Valida el digito verificador de un RUC de 11 digitos. Implementa el algoritmo oficial
+                            de SUNAT con pesos descendentes y modulo 11.</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- ========== CODIGO FUENTE - CURL.PHP ========== -->
+            <h2 id="src-curl">Codigo Fuente: src/curl.php</h2>
+
+            <p>
+                Wrapper completo de la extension <code>ext-curl</code> de PHP. Maneja todas las opciones de cURL
+                de forma programatica: cookies, proxy, autenticacion, headers, POST/GET, etc.
+            </p>
+
+            <h3>Metodos principales</h3>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Metodo</th>
+                        <th>Que hace</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>connect($url)</code></td>
+                        <td>Realiza un GET simple. Retorna el HTML de respuesta.</td>
+                    </tr>
+                    <tr>
+                        <td><code>send($url, $post)</code></td>
+                        <td>Realiza un POST con datos form-urlencoded. Retorna el HTML.</td>
+                    </tr>
+                    <tr>
+                        <td><code>sendBinary($url, $binary)</code></td>
+                        <td>Envia datos binarios (JSON, etc.) via POST.</td>
+                    </tr>
+                    <tr>
+                        <td><code>createCurl($url)</code></td>
+                        <td>Metodo interno que configura y ejecuta la peticion cURL.</td>
+                    </tr>
+                    <tr>
+                        <td><code>getHttpStatus()</code></td>
+                        <td>Retorna el codigo HTTP de la ultima peticion (200, 401, etc.)</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Soporte de funcionalidades</h3>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Funcionalidad</th>
+                        <th>Metodos</th>
+                        <th>Descripcion</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Cookies</td>
+                        <td><code>useCookie()</code>, <code>setCookiFileLocation()</code></td>
+                        <td>Persistencia de cookies en archivo. Esencial para JSESSIONID.</td>
+                    </tr>
+                    <tr>
+                        <td>Proxy</td>
+                        <td><code>useProxy()</code>, <code>setProxyHost()</code>, <code>setProxyPort()</code>, <code>setProxyType()</code></td>
+                        <td>Soporte para HTTP, SOCKS4, SOCKS5 proxies con autenticacion opcional.</td>
+                    </tr>
+                    <tr>
+                        <td>Auth</td>
+                        <td><code>useAuth()</code>, <code>setAuthName()</code>, <code>setAuthPass()</code>, <code>setAuthType()</code></td>
+                        <td>Autenticacion HTTP basica/digest/NTLM.</td>
+                    </tr>
+                    <tr>
+                        <td>Headers</td>
+                        <td><code>setHttpHeader()</code>, <code>setUserAgent()</code>, <code>setReferer()</code></td>
+                        <td>Headers personalizados, user-agent y referer.</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="card info">
+                <div class="card-title">Detalle importante: reutilizacion de handle</div>
+                <p>
+                    La clase <code>cURL</code> reutiliza el mismo handle de cURL (inicializado en el constructor
+                    con <code>curl_init()</code>) para todas las peticiones. Esto es eficiente porque mantiene
+                    la conexion TCP abierta (keep-alive) y comparte el cookie jar automaticamente entre peticiones.
+                    Es exactamente lo que necesitamos para que la cookie JSESSIONID del GET inicial persista
+                    en los POSTs subsiguientes.
+                </p>
+            </div>
+
+            <!-- ========== CODIGO FUENTE - OBJ.PHP ========== -->
+            <h2 id="src-obj">Codigo Fuente: src/obj.php</h2>
+
+            <p>
+                Clase de respuesta dinamica que permite construir objetos con propiedades arbitrarias
+                y serializarlos a JSON o XML.
+            </p>
+
+            <h3>Caracteristicas</h3>
+
+            <ul>
+                <li><strong>Propiedades dinamicas:</strong> Se pueden asignar propiedades con cualquier nombre via <code>__set()</code></li>
+                <li><strong>Acceso seguro:</strong> <code>__get()</code> retorna un <code>obj</code> vacio si la propiedad no existe (evita errores)</li>
+                <li><strong>Arrays anidados:</strong> El constructor convierte arrays anidados en objetos <code>obj</code> recursivamente</li>
+                <li><strong>Salida JSON:</strong> <code>$obj->json()</code> o <code>$obj->json(null, true)</code> para pretty-print</li>
+                <li><strong>Salida JSONP:</strong> <code>$obj->json('callback')</code> retorna <code>callback({...});</code></li>
+                <li><strong>Salida XML:</strong> <code>$obj->xml('root')</code> genera XML con SimpleXMLElement</li>
+            </ul>
+
+            <h3>Ejemplo de uso</h3>
+
+<pre><code>$response = <span class="kw">new</span> \response\obj(<span class="kw">array</span>(
+    <span class="str">'success'</span> => <span class="kw">true</span>,
+    <span class="str">'result'</span>  => <span class="kw">array</span>(
+        <span class="str">'ruc'</span>          => <span class="str">'20516872307'</span>,
+        <span class="str">'razon_social'</span> => <span class="str">'DISTRIBUIDORA JANDY SAC'</span>,
+        <span class="str">'estado'</span>       => <span class="str">'ACTIVO'</span>
+    )
+));
+
+<span class="cm">// JSON</span>
+<span class="kw">echo</span> $response->json();
+<span class="cm">// {"success":true,"result":{"ruc":"20516872307",...}}</span>
+
+<span class="cm">// JSON pretty</span>
+<span class="kw">echo</span> $response->json(<span class="kw">null</span>, <span class="kw">true</span>);
+
+<span class="cm">// JSONP</span>
+<span class="kw">echo</span> $response->json(<span class="str">'myCallback'</span>);
+<span class="cm">// myCallback({"success":true,...});</span>
+
+<span class="cm">// XML</span>
+<span class="kw">echo</span> $response->xml(<span class="str">'consulta'</span>);
+<span class="cm">// &lt;?xml version="1.0"?&gt;&lt;consulta&gt;...&lt;/consulta&gt;</span></code></pre>
+
+            <!-- ========== CODIGO FUENTE - AUTOLOAD.PHP ========== -->
+            <h2 id="src-autoload">Codigo Fuente: src/autoload.php</h2>
+
+            <p>
+                Archivo simple de autocarga que incluye las 3 clases del proyecto:
+            </p>
+
+<pre><code>&lt;?php
+    require_once(__DIR__ . <span class="str">"/obj.php"</span>);
+    require_once(__DIR__ . <span class="str">"/curl.php"</span>);
+    require_once(__DIR__ . <span class="str">"/sunat.php"</span>);
+?&gt;</code></pre>
+
+            <div class="card info">
+                <div class="card-title">Nota sobre autoloading</div>
+                <p>
+                    Aunque el proyecto tiene un <code>composer.json</code> con autoload PSR-4 configurado,
+                    el metodo mas simple de uso es incluir directamente <code>src/autoload.php</code>.
+                    El PSR-4 del composer mapea los 3 namespaces (<code>Sunat\</code>, <code>cURL\</code>,
+                    <code>response\</code>) todos al directorio <code>src/</code>.
+                </p>
+            </div>
+
+            <div class="divider"></div>
+
+            <!-- ========== INICIO RAPIDO ========== -->
+            <h2 id="quickstart">Inicio Rapido</h2>
+
+            <h3>Requisitos</h3>
+
+            <ul>
+                <li><strong>PHP 7.4+</strong> (compatible con PHP 8.0, 8.1, 8.2, 8.3, 8.4, 8.5)</li>
+                <li>Extension <code>ext-curl</code> habilitada</li>
+                <li>Extension <code>ext-dom</code> habilitada (para DOMDocument/DOMXPath)</li>
+                <li>Extension <code>ext-libxml</code> habilitada</li>
+                <li>Conexion a internet (para acceder al portal de SUNAT)</li>
+            </ul>
+
+            <h3>Instalacion</h3>
+
+            <div class="step">
+                <div class="step-num">1</div>
+                <div class="step-content">
+                    <strong>Clonar el repositorio</strong>
+<pre><code>git clone https://github.com/Thirstypooch/sunat-php-boss.git
+cd sunat-php-boss</code></pre>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-num">2</div>
+                <div class="step-content">
+                    <strong>Ejecutar la prueba</strong>
+<pre><code>php prueba.php</code></pre>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-num">3</div>
+                <div class="step-content">
+                    <strong>Resultado esperado</strong>
+<pre><code>=== Buscando RUC: 20516872307 ===
+
+EXITO!
+
+{
+    "success": true,
+    "result": {
+        "ruc": "20516872307",
+        "razon_social": "DISTRIBUIDORA JANDY SAC",
+        "nombre_comercial": "-",
+        "tipo": "SOCIEDAD ANONIMA CERRADA",
+        "estado": "ACTIVO",
+        "condicion": "HABIDO",
+        "direccion": "...",
+        ...
+        "representantes_legales": { ... },
+        "cantidad_trabajadores": { ... }
+    }
+}</code></pre>
+                </div>
+            </div>
+
+            <!-- ========== USO EN PHP ========== -->
+            <h2 id="usage-php">Uso en PHP</h2>
+
+            <h3>Consulta basica (solo datos del contribuyente)</h3>
+
+<pre><code>&lt;?php
+require_once(<span class="str">"./src/autoload.php"</span>);
+
+<span class="cm">// false, false = sin representantes legales, sin trabajadores</span>
+$sunat = <span class="kw">new</span> \Sunat\Sunat(<span class="kw">false</span>, <span class="kw">false</span>);
+$resultado = $sunat->search(<span class="str">"20516872307"</span>);
+
+<span class="kw">if</span>( $resultado->success == <span class="kw">true</span> )
+{
+    <span class="kw">echo</span> $resultado->result->razon_social;  <span class="cm">// DISTRIBUIDORA JANDY SAC</span>
+    <span class="kw">echo</span> $resultado->result->estado;         <span class="cm">// ACTIVO</span>
+    <span class="kw">echo</span> $resultado->result->condicion;      <span class="cm">// HABIDO</span>
+    <span class="kw">echo</span> $resultado->result->direccion;      <span class="cm">// ...</span>
+}
+<span class="kw">else</span>
+{
+    <span class="kw">echo</span> <span class="str">"Error: "</span> . $resultado->message;
+}</code></pre>
+
+            <h3>Consulta completa (con representantes y trabajadores)</h3>
+
+<pre><code>&lt;?php
+require_once(<span class="str">"./src/autoload.php"</span>);
+
+<span class="cm">// true, true = incluir representantes legales + trabajadores</span>
+$sunat = <span class="kw">new</span> \Sunat\Sunat(<span class="kw">true</span>, <span class="kw">true</span>);
+$resultado = $sunat->search(<span class="str">"20516872307"</span>);
+
+<span class="cm">// Salida JSON</span>
+<span class="kw">echo</span> $resultado->json(<span class="kw">null</span>, <span class="kw">true</span>);</code></pre>
+
+            <h3>Consulta por DNI</h3>
+
+<pre><code>&lt;?php
+require_once(<span class="str">"./src/autoload.php"</span>);
+
+$sunat = <span class="kw">new</span> \Sunat\Sunat();
+<span class="cm">// Pasar DNI de 8 digitos - se convierte automaticamente a RUC</span>
+$resultado = $sunat->search(<span class="str">"12345678"</span>);
+
+<span class="kw">if</span>( $resultado->success )
+{
+    <span class="kw">echo</span> $resultado->result->ruc;  <span class="cm">// 10123456785 (RUC generado)</span>
+}</code></pre>
+
+            <h3>Salida XML</h3>
+
+<pre><code>&lt;?php
+require_once(<span class="str">"./src/autoload.php"</span>);
+
+$sunat = <span class="kw">new</span> \Sunat\Sunat(<span class="kw">true</span>);
+$resultado = $sunat->search(<span class="str">"20516872307"</span>);
+
+<span class="kw">if</span>( $resultado->success )
+{
+    header(<span class="str">'Content-Type: application/xml'</span>);
+    <span class="kw">echo</span> $resultado->xml(<span class="str">'consulta'</span>);
+}</code></pre>
+
+            <h3>Salida JSONP (para AJAX cross-domain)</h3>
+
+<pre><code>&lt;?php
+require_once(<span class="str">"./src/autoload.php"</span>);
+
+$callback = $_GET[<span class="str">'callback'</span>] ?? <span class="kw">null</span>;
+$sunat = <span class="kw">new</span> \Sunat\Sunat();
+$resultado = $sunat->search($_GET[<span class="str">'ruc'</span>]);
+
+header(<span class="str">'Content-Type: application/javascript'</span>);
+<span class="kw">echo</span> $resultado->json($callback);</code></pre>
+
+            <!-- ========== INTERFAZ WEB ========== -->
+            <h2 id="usage-web">Interfaz Web (example/)</h2>
+
+            <p>
+                El proyecto incluye una interfaz web funcional en la carpeta <code>example/</code>.
+                Es una pagina Bootstrap 4 con un campo de busqueda que hace llamadas AJAX a
+                <code>consulta.php</code> y muestra los resultados en una tabla y como JSON.
+            </p>
+
+            <h3>Como ejecutarla</h3>
+
+<pre><code><span class="cm"># Desde la raiz del proyecto:</span>
+cd example
+php -S localhost:8080
+
+<span class="cm"># Abrir en navegador:</span>
+<span class="cm"># http://localhost:8080</span></code></pre>
+
+            <h3>Arquitectura de la interfaz</h3>
+
+            <div class="mermaid">
+sequenceDiagram
+    participant Browser as Navegador
+    participant Index as index.php
+    participant Consulta as consulta.php
+    participant Sunat as Clase Sunat
+
+    Browser->>Index: Carga la pagina
+    Note over Browser: Usuario escribe RUC<br/>y hace click en "Buscar"
+
+    Browser->>Consulta: AJAX POST { nruc: "20516872307" }
+    Consulta->>Sunat: new Sunat(true, true)<br/>search("20516872307")
+    Sunat-->>Consulta: objeto response\obj
+    Consulta-->>Browser: JSON (Content-Type: text/plain)
+    Note over Browser: jQuery parsea JSON<br/>y muestra en tabla
+            </div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Archivo</th>
+                        <th>Funcion</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>example/index.php</code></td>
+                        <td>Frontend Bootstrap 4 con formulario de busqueda, tabs "Respuesta" y "Json", jQuery para AJAX</td>
+                    </tr>
+                    <tr>
+                        <td><code>example/consulta.php</code></td>
+                        <td>Backend que recibe <code>nruc</code> via POST, ejecuta <code>$sunat->search()</code> y retorna JSON</td>
+                    </tr>
+                    <tr>
+                        <td><code>example/js/ajaxview.js</code></td>
+                        <td>Plugin jQuery que muestra un overlay de "cargando" durante la peticion AJAX</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- ========== FORMATO DE RESPUESTA ========== -->
+            <h2 id="response-format">Formato de Respuesta</h2>
+
+            <h3>Respuesta exitosa</h3>
+
+<pre><code>{
+    <span class="str">"success"</span>: <span class="kw">true</span>,
+    <span class="str">"result"</span>: {
+        <span class="str">"ruc"</span>: <span class="str">"20516872307"</span>,
+        <span class="str">"razon_social"</span>: <span class="str">"DISTRIBUIDORA JANDY SAC"</span>,
+        <span class="str">"nombre_comercial"</span>: <span class="str">"-"</span>,
+        <span class="str">"tipo"</span>: <span class="str">"SOCIEDAD ANONIMA CERRADA"</span>,
+        <span class="str">"fecha_inscripcion"</span>: <span class="str">"03/01/2013"</span>,
+        <span class="str">"estado"</span>: <span class="str">"ACTIVO"</span>,
+        <span class="str">"condicion"</span>: <span class="str">"HABIDO"</span>,
+        <span class="str">"direccion"</span>: <span class="str">"AV. AVIACION NRO. 123 URB. SAN BORJA"</span>,
+        <span class="str">"sistema_emision"</span>: <span class="str">"MANUAL/COMPUTARIZADO"</span>,
+        <span class="str">"actividad_exterior"</span>: <span class="str">"SIN ACTIVIDAD"</span>,
+        <span class="str">"sistema_contabilidad"</span>: <span class="str">"COMPUTARIZADO"</span>,
+        <span class="str">"oficio"</span>: <span class="str">"-"</span>,
+        <span class="str">"actividad_economica"</span>: <span class="str">"VENTA AL POR MAYOR DE OTROS PRODUCTOS"</span>,
+        <span class="str">"emision_electronica"</span>: <span class="str">"01/07/2019"</span>,
+        <span class="str">"ple"</span>: <span class="str">"01/01/2015"</span>,
+        <span class="str">"representantes_legales"</span>: {
+            <span class="str">"r1"</span>: {
+                <span class="str">"tipodoc"</span>: <span class="str">"DOC. NACIONAL DE IDENTIDAD"</span>,
+                <span class="str">"numdoc"</span>: <span class="str">"12345678"</span>,
+                <span class="str">"nombre"</span>: <span class="str">"PEREZ GARCIA, JUAN CARLOS"</span>,
+                <span class="str">"cargo"</span>: <span class="str">"GERENTE GENERAL"</span>,
+                <span class="str">"desde"</span>: <span class="str">"01/01/2013"</span>
+            },
+            <span class="str">"r2"</span>: { ... },
+            <span class="str">"r3"</span>: { ... }
+        },
+        <span class="str">"cantidad_trabajadores"</span>: {
+            <span class="str">"p1"</span>: {
+                <span class="str">"periodo"</span>: <span class="str">"2026-01"</span>,
+                <span class="str">"anio"</span>: <span class="str">"2026"</span>,
+                <span class="str">"mes"</span>: <span class="str">"01"</span>,
+                <span class="str">"total_trabajadores"</span>: <span class="str">"15"</span>,
+                <span class="str">"pensionista"</span>: <span class="str">"0"</span>,
+                <span class="str">"prestador_servicio"</span>: <span class="str">"3"</span>
+            },
+            <span class="str">"p2"</span>: { ... }
+        }
+    }
+}</code></pre>
+
+            <h3>Respuesta de error</h3>
+
+<pre><code><span class="cm">// RUC invalido</span>
+{ <span class="str">"success"</span>: <span class="kw">false</span>, <span class="str">"message"</span>: <span class="str">"RUC no valido"</span> }
+
+<span class="cm">// Formato incorrecto</span>
+{ <span class="str">"success"</span>: <span class="kw">false</span>, <span class="str">"message"</span>: <span class="str">"Formato RUC/DNI no validos."</span> }
+
+<span class="cm">// No se pudo conectar</span>
+{ <span class="str">"success"</span>: <span class="kw">false</span>, <span class="str">"message"</span>: <span class="str">"No se pudo conectar a sunat."</span> }
+
+<span class="cm">// No se pudo iniciar sesion</span>
+{ <span class="str">"success"</span>: <span class="kw">false</span>, <span class="str">"message"</span>: <span class="str">"No se pudo iniciar sesion con SUNAT."</span> }
+
+<span class="cm">// RUC no encontrado o sin datos</span>
+{ <span class="str">"success"</span>: <span class="kw">false</span>, <span class="str">"message"</span>: <span class="str">"No se encontraron datos suficientes."</span> }</code></pre>
+
+            <!-- ========== REFERENCIA DE CAMPOS ========== -->
+            <h2 id="field-reference">Referencia de Campos</h2>
+
+            <h3>Campos principales</h3>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Campo</th>
+                        <th>Descripcion</th>
+                        <th>Ejemplo</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>ruc</code></td>
+                        <td>Numero de RUC de 11 digitos</td>
+                        <td>20516872307</td>
+                    </tr>
+                    <tr>
+                        <td><code>razon_social</code></td>
+                        <td>Nombre completo del contribuyente</td>
+                        <td>DISTRIBUIDORA JANDY SAC</td>
+                    </tr>
+                    <tr>
+                        <td><code>nombre_comercial</code></td>
+                        <td>Nombre comercial (si difiere de la razon social)</td>
+                        <td>- (o nombre comercial)</td>
+                    </tr>
+                    <tr>
+                        <td><code>tipo</code></td>
+                        <td>Tipo de contribuyente</td>
+                        <td>SOCIEDAD ANONIMA CERRADA</td>
+                    </tr>
+                    <tr>
+                        <td><code>fecha_inscripcion</code></td>
+                        <td>Fecha de inscripcion en SUNAT</td>
+                        <td>03/01/2013</td>
+                    </tr>
+                    <tr>
+                        <td><code>estado</code></td>
+                        <td>Estado del contribuyente</td>
+                        <td>ACTIVO, BAJA PROVISIONAL, BAJA DEFINITIVA, SUSPENSION TEMPORAL</td>
+                    </tr>
+                    <tr>
+                        <td><code>condicion</code></td>
+                        <td>Condicion del domicilio</td>
+                        <td>HABIDO, NO HABIDO, NO HALLADO</td>
+                    </tr>
+                    <tr>
+                        <td><code>direccion</code></td>
+                        <td>Domicilio fiscal completo</td>
+                        <td>AV. AVIACION NRO. 123 URB. SAN BORJA</td>
+                    </tr>
+                    <tr>
+                        <td><code>sistema_emision</code></td>
+                        <td>Sistema de emision de comprobantes</td>
+                        <td>MANUAL/COMPUTARIZADO</td>
+                    </tr>
+                    <tr>
+                        <td><code>actividad_exterior</code></td>
+                        <td>Actividad de comercio exterior</td>
+                        <td>SIN ACTIVIDAD, IMPORTADOR, EXPORTADOR</td>
+                    </tr>
+                    <tr>
+                        <td><code>sistema_contabilidad</code></td>
+                        <td>Sistema de contabilidad</td>
+                        <td>MANUAL, COMPUTARIZADO</td>
+                    </tr>
+                    <tr>
+                        <td><code>oficio</code></td>
+                        <td>Profesion u oficio</td>
+                        <td>- (para empresas), o profesion para persona natural</td>
+                    </tr>
+                    <tr>
+                        <td><code>actividad_economica</code></td>
+                        <td>Actividad(es) economica(s) registrada(s)</td>
+                        <td>VENTA AL POR MAYOR DE OTROS PRODUCTOS</td>
+                    </tr>
+                    <tr>
+                        <td><code>emision_electronica</code></td>
+                        <td>Fecha desde la que es emisor electronico</td>
+                        <td>01/07/2019 (o vacio si no aplica)</td>
+                    </tr>
+                    <tr>
+                        <td><code>ple</code></td>
+                        <td>Fecha de afiliacion al PLE (Programa de Libros Electronicos)</td>
+                        <td>01/01/2015</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Campos de representantes legales</h3>
+
+            <p>Cada representante esta indexado como <code>r1</code>, <code>r2</code>, <code>r3</code>, etc.</p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Campo</th>
+                        <th>Descripcion</th>
+                        <th>Ejemplo</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>tipodoc</code></td>
+                        <td>Tipo de documento de identidad</td>
+                        <td>DOC. NACIONAL DE IDENTIDAD</td>
+                    </tr>
+                    <tr>
+                        <td><code>numdoc</code></td>
+                        <td>Numero de documento</td>
+                        <td>12345678</td>
+                    </tr>
+                    <tr>
+                        <td><code>nombre</code></td>
+                        <td>Nombre completo del representante</td>
+                        <td>PEREZ GARCIA, JUAN CARLOS</td>
+                    </tr>
+                    <tr>
+                        <td><code>cargo</code></td>
+                        <td>Cargo en la empresa</td>
+                        <td>GERENTE GENERAL</td>
+                    </tr>
+                    <tr>
+                        <td><code>desde</code></td>
+                        <td>Fecha desde que ejerce el cargo</td>
+                        <td>01/01/2013</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Campos de cantidad de trabajadores</h3>
+
+            <p>Cada periodo esta indexado como <code>p1</code>, <code>p2</code>, ..., <code>p12</code>.</p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Campo</th>
+                        <th>Descripcion</th>
+                        <th>Ejemplo</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>periodo</code></td>
+                        <td>Periodo en formato YYYY-MM</td>
+                        <td>2026-01</td>
+                    </tr>
+                    <tr>
+                        <td><code>anio</code></td>
+                        <td>Ano del periodo</td>
+                        <td>2026</td>
+                    </tr>
+                    <tr>
+                        <td><code>mes</code></td>
+                        <td>Mes del periodo</td>
+                        <td>01</td>
+                    </tr>
+                    <tr>
+                        <td><code>total_trabajadores</code></td>
+                        <td>Total de trabajadores registrados</td>
+                        <td>15</td>
+                    </tr>
+                    <tr>
+                        <td><code>pensionista</code></td>
+                        <td>Cantidad de pensionistas</td>
+                        <td>0</td>
+                    </tr>
+                    <tr>
+                        <td><code>prestador_servicio</code></td>
+                        <td>Cantidad de prestadores de servicio</td>
+                        <td>3</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- ========== DNI A RUC ========== -->
+            <h2 id="dni-to-ruc">Conversion DNI a RUC</h2>
+
+            <p>
+                La libreria convierte automaticamente un DNI de 8 digitos a su correspondiente RUC de persona natural.
+                El algoritmo es el oficial de SUNAT:
+            </p>
+
+            <div class="mermaid">
+flowchart LR
+    A["DNI: 12345678<br/>(8 digitos)"] --> B["Prefijo: 10<br/>10 + 12345678"]
+    B --> C["Calculo digito verificador<br/>Pesos: 5,4,3,2,7,6,5,4,3,2"]
+    C --> D["Suma ponderada mod 11"]
+    D --> E["Digito = 11 - resto"]
+    E --> F["RUC: 1012345678X<br/>(11 digitos)"]
+
+    style A fill:#9e6a03,stroke:#f0883e,color:#fff
+    style F fill:#238636,stroke:#3fb950,color:#fff
+            </div>
+
+<pre><code><span class="cm">// Algoritmo dnitoruc() simplificado:</span>
+<span class="cm">// 1. Prefijar con "10": 10 + 12345678 = 1012345678</span>
+<span class="cm">// 2. Multiplicar cada digito por su peso:</span>
+<span class="cm">//    1*5 + 0*4 + 1*3 + 2*2 + 3*7 + 4*6 + 5*5 + 6*4 + 7*3 + 8*2</span>
+<span class="cm">// 3. Sumar los productos</span>
+<span class="cm">// 4. Dividir entre 11, tomar el resto</span>
+<span class="cm">// 5. Digito verificador = 11 - resto</span>
+<span class="cm">//    (si es 10 -> 0, si es 11 -> 1)</span>
+<span class="cm">// 6. Resultado: 10123456785</span></code></pre>
+
+            <div class="divider"></div>
+
+            <!-- ========== SOLUCION DE PROBLEMAS ========== -->
+            <h2 id="troubleshooting">Solucion de Problemas</h2>
+
+            <div class="card danger">
+                <div class="card-title">Error: "No se pudo iniciar sesion con SUNAT"</div>
+                <ul>
+                    <li>Verificar conexion a internet</li>
+                    <li>Verificar que <code>ext-curl</code> esta habilitada: <code>php -m | grep curl</code></li>
+                    <li>En Windows, si hay error SSL: descargar <code>cacert.pem</code> y configurar en <code>php.ini</code>:
+                        <code>curl.cainfo = "C:\php\cacert.pem"</code></li>
+                    <li>Probar acceso manual: <code>curl -I https://e-consultaruc.sunat.gob.pe</code></li>
+                </ul>
+            </div>
+
+            <div class="card danger">
+                <div class="card-title">Error: "No se encontraron datos suficientes" (intermitente)</div>
+                <ul>
+                    <li>Generalmente causado por cookies obsoletas. Verificar que <code>initSession()</code>
+                        esta limpiando el archivo de cookies correctamente.</li>
+                    <li>Eliminar manualmente <code>src/cookie.txt</code> y reintentar.</li>
+                    <li>Si persiste, SUNAT podria estar temporalmente caido o bloqueando la IP.</li>
+                </ul>
+            </div>
+
+            <div class="card danger">
+                <div class="card-title">Error: "RUC no valido"</div>
+                <ul>
+                    <li>El digito verificador del RUC no coincide. El RUC debe empezar con 10 (persona natural)
+                        o 20 (empresa). Verificar los 11 digitos.</li>
+                </ul>
+            </div>
+
+            <div class="card warning">
+                <div class="card-title">Deprecation warnings en PHP 8.2+</div>
+                <ul>
+                    <li>Estos ya fueron corregidos en la version actual del proyecto.</li>
+                    <li>Si persisten, verificar que se esta usando la version actualizada de los 3 archivos:
+                        <code>sunat.php</code>, <code>curl.php</code> y <code>obj.php</code>.</li>
+                </ul>
+            </div>
+
+            <div class="card info">
+                <div class="card-title">SSL en Windows</div>
+                <p>
+                    PHP en Windows frecuentemente no tiene un bundle de certificados CA configurado.
+                    El wrapper <code>cURL</code> de este proyecto tiene <code>CURLOPT_SSL_VERIFYPEER = false</code>
+                    por defecto, lo que evita este problema. Para un entorno de produccion, se recomienda
+                    descargar <code>cacert.pem</code> de <a href="https://curl.se/docs/caextract.html">curl.se</a>
+                    y configurarlo en <code>php.ini</code>.
+                </p>
+            </div>
+
+            <!-- ========== ENDPOINTS SUNAT ========== -->
+            <h2 id="sunat-endpoints">Endpoints SUNAT (Referencia)</h2>
+
+            <p>
+                Documentacion de los endpoints del portal de consulta RUC de SUNAT que utiliza esta libreria:
+            </p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Metodo</th>
+                        <th>URL</th>
+                        <th>Proposito</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span class="badge new">GET</span></td>
+                        <td><code>https://e-consultaruc.sunat.gob.pe/cl-ti-itmrconsruc/FrameCriterioBusquedaWeb.jsp</code></td>
+                        <td>Pagina del formulario de busqueda. Establece la cookie JSESSIONID.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge fixed">POST</span></td>
+                        <td><code>https://e-consultaruc.sunat.gob.pe/cl-ti-itmrconsruc/jcrS00Alias</code></td>
+                        <td>Endpoint principal. Acepta las acciones <code>consPorRuc</code>, <code>getRepLeg</code>, <code>getCantTrab</code>.</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Acciones del endpoint POST</h3>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>accion</th>
+                        <th>Parametros adicionales</th>
+                        <th>Retorna</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>consPorRuc</code></td>
+                        <td><code>nroRuc</code>, <code>token</code>, <code>contexto</code>, <code>modo</code></td>
+                        <td>Datos principales del contribuyente (HTML Bootstrap list-group)</td>
+                    </tr>
+                    <tr>
+                        <td><code>getRepLeg</code></td>
+                        <td><code>nroRuc</code>, <code>desRuc</code>, <code>contexto</code>, <code>modo</code></td>
+                        <td>Tabla de representantes legales (HTML table con thead/tbody)</td>
+                    </tr>
+                    <tr>
+                        <td><code>getCantTrab</code></td>
+                        <td><code>nroRuc</code>, <code>contexto</code>, <code>modo</code></td>
+                        <td>Tabla de cantidad de trabajadores por mes (HTML table)</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="card warning">
+                <div class="card-title">Endpoints obsoletos (ya NO funcionan)</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Endpoint</th>
+                            <th>Estado</th>
+                            <th>Reemplazo</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>/captcha?accion=random</code></td>
+                            <td><span class="badge broken">401</span></td>
+                            <td><code>bin2hex(random_bytes(26))</code></td>
+                        </tr>
+                        <tr>
+                            <td><code>frameCriterioBusqueda.jsp</code> (minuscula)</td>
+                            <td><span class="badge broken">404</span></td>
+                            <td><code>FrameCriterioBusquedaWeb.jsp</code></td>
+                        </tr>
+                        <tr>
+                            <td>URLs con <code>http://</code></td>
+                            <td><span class="badge broken">301</span></td>
+                            <td>Usar <code>https://</code></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- ========== COMPARACION CON LARAVEL ========== -->
+            <h2 id="comparison">Comparacion con API Laravel</h2>
+
+            <p>
+                Este proyecto (SunatPHP vanilla) y la API Laravel (<code>sunat-api-php</code>) resuelven el mismo
+                problema pero con enfoques diferentes. Ambos usan el mismo mecanismo de token y parseo DOM.
+            </p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Caracteristica</th>
+                        <th>SunatPHP (Vanilla)</th>
+                        <th>API Laravel</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Framework</td>
+                        <td>Ninguno (PHP puro)</td>
+                        <td>Laravel 11</td>
+                    </tr>
+                    <tr>
+                        <td>HTTP Client</td>
+                        <td>Wrapper cURL personalizado</td>
+                        <td>Guzzle via Http facade</td>
+                    </tr>
+                    <tr>
+                        <td>Parser HTML</td>
+                        <td>DOMDocument + DOMXPath</td>
+                        <td>DOMDocument + DOMXPath</td>
+                    </tr>
+                    <tr>
+                        <td>Token</td>
+                        <td><code>bin2hex(random_bytes(26))</code></td>
+                        <td><code>bin2hex(random_bytes(26))</code></td>
+                    </tr>
+                    <tr>
+                        <td>Cache</td>
+                        <td>Sin cache</td>
+                        <td>SQLite con TTL configurable</td>
+                    </tr>
+                    <tr>
+                        <td>Autenticacion</td>
+                        <td>Sin auth</td>
+                        <td>API Key via header/bearer</td>
+                    </tr>
+                    <tr>
+                        <td>Formato de salida</td>
+                        <td>JSON, XML, JSONP</td>
+                        <td>JSON</td>
+                    </tr>
+                    <tr>
+                        <td>Representantes legales</td>
+                        <td>Si (con nombres de cargo)</td>
+                        <td>Si</td>
+                    </tr>
+                    <tr>
+                        <td>Cantidad trabajadores</td>
+                        <td>Si (12 meses con desglose)</td>
+                        <td>No</td>
+                    </tr>
+                    <tr>
+                        <td>Campos extra</td>
+                        <td>actividad_economica, emision_electronica, ple, oficio</td>
+                        <td>telefono (si disponible)</td>
+                    </tr>
+                    <tr>
+                        <td>Conversion DNI a RUC</td>
+                        <td>Si (algoritmo integrado)</td>
+                        <td>No</td>
+                    </tr>
+                    <tr>
+                        <td>Validacion RUC</td>
+                        <td>Si (digito verificador)</td>
+                        <td>Si (regex basica)</td>
+                    </tr>
+                    <tr>
+                        <td>Interfaz web</td>
+                        <td>Si (Bootstrap + jQuery)</td>
+                        <td>No (solo API REST)</td>
+                    </tr>
+                    <tr>
+                        <td>Instalacion</td>
+                        <td><code>git clone</code> + <code>php prueba.php</code></td>
+                        <td><code>git clone</code> + <code>composer install</code> + <code>.env</code> + <code>migrate</code></td>
+                    </tr>
+                    <tr>
+                        <td>Dependencias</td>
+                        <td>Solo ext-curl</td>
+                        <td>Laravel + Guzzle + SQLite + ...</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="card success">
+                <div class="card-title">Ventaja de SunatPHP vanilla</div>
+                <p>
+                    Es mas ligero, mas facil de desplegar (un solo <code>require</code> y funciona),
+                    extrae mas campos que la version Laravel, incluye conversion DNI-a-RUC, y tiene
+                    una interfaz web lista para usar. Ideal para integraciones rapidas donde no se
+                    necesita un framework completo.
+                </p>
+            </div>
+
+            <div class="divider"></div>
+
+            <!-- ========== FOOTER ========== -->
+            <div style="text-align: center; padding: 40px 0; color: var(--text-muted); font-size: 14px;">
+                <p>
+                    <strong>SunatPHP</strong> &mdash; Proyecto original por
+                    <a href="https://github.com/JossMP/SunatPHP">JossMP</a> &mdash;
+                    Actualizado y documentado, Febrero 2026
+                </p>
+                <p style="margin-top: 8px;">
+                    Libreria de uso interno. Los datos obtenidos son de acceso publico en el portal de SUNAT.
+                </p>
+            </div>
+
+        </main>
+    </div>
+
+    <script>
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'dark',
+            themeVariables: {
+                primaryColor: '#1f6feb',
+                primaryTextColor: '#e6edf3',
+                primaryBorderColor: '#58a6ff',
+                lineColor: '#58a6ff',
+                secondaryColor: '#238636',
+                tertiaryColor: '#161b22',
+                fontFamily: '-apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif',
+                fontSize: '14px'
+            }
+        });
+    </script>
+</body>
+</html>
