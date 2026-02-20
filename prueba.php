@@ -1,28 +1,37 @@
 <?php
 	require_once("./src/autoload.php");
-	
+
 	$company = new \Sunat\Sunat( true, true );
-	$ruc = "20169004359";
-	$dni = "44274795";
-	
-	$search1 = $company->search( $ruc );
-	$search2 = $company->search( $dni );
-	
-	var_dump($search1);
-	var_dump($search2);
-	
-	if( $search1->success == true )
+
+	// Test with known RUC (DISTRIBUIDORA JANDY SAC)
+	$ruc = "20516872307";
+
+	echo "=== Buscando RUC: $ruc ===\n\n";
+	$search = $company->search( $ruc );
+
+	if( $search->success == true )
 	{
-		echo "Empresa: " . $search1->result->RazonSocial;
+		echo "EXITO!\n\n";
+		echo $search->json( null, true );
 	}
-	
+	else
+	{
+		echo "ERROR: " . $search->message . "\n";
+	}
+
+	echo "\n\n";
+
+	// Test with original RUC from boss's code
+	$ruc2 = "20169004359";
+	echo "=== Buscando RUC: $ruc2 ===\n\n";
+	$search2 = $company->search( $ruc2 );
+
 	if( $search2->success == true )
 	{
-		echo "Persona: " . $search1->result->RazonSocial;
+		echo "EXITO!\n\n";
+		echo $search2->json( null, true );
 	}
-	
-	// Mostrar en formato XML/JSON
-	echo $search1->json();
-	echo $search1->xml('empresa');
-	
-?>
+	else
+	{
+		echo "ERROR: " . $search2->message . "\n";
+	}

@@ -1,5 +1,6 @@
 <?php
 	namespace response;
+	#[\AllowDynamicProperties]
 	class obj
 	{
 		public function __construct( array $value = array() )
