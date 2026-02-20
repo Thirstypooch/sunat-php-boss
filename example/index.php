@@ -120,7 +120,29 @@
 								$("#tbody").html("");
 								$.each(data['result'], function(i, v)
 								{
-									$("#tbody").append('<tr><td>'+i+'<\/td><td>'+v+'<\/td><\/tr>');
+									var cell = '';
+									if(v !== null && typeof v === 'object')
+									{
+										cell = '<table class="table table-sm table-bordered mb-0">';
+										$.each(v, function(k, row){
+											if(row !== null && typeof row === 'object')
+											{
+												var vals = [];
+												$.each(row, function(rk, rv){ vals.push('<strong>'+rk+':</strong> '+rv); });
+												cell += '<tr><td>'+k+'</td><td>'+vals.join(' | ')+'</td></tr>';
+											}
+											else
+											{
+												cell += '<tr><td>'+k+'</td><td>'+row+'</td></tr>';
+											}
+										});
+										cell += '</table>';
+									}
+									else
+									{
+										cell = v;
+									}
+									$("#tbody").append('<tr><td>'+i+'<\/td><td>'+cell+'<\/td><\/tr>');
 								});
 							}
 							//$this.button('reset');
